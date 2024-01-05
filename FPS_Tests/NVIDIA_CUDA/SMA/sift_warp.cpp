@@ -8,7 +8,7 @@
 #include <time.h>
 #include <opencv4/opencv2/opencv.hpp>
 #include <opencv4/opencv2/features2d.hpp>
-#include "./headers/homographer.h"
+#include "../headers/homographer.h"
 
 cv::cuda::GpuMat shiftFrame(cv::cuda::GpuMat image, int x, int y, cv::Size_<int> maskSize) {
   cv::Mat shift = (cv::Mat_<double>(3, 3) << 1, 0, x, 0, 1, y, 0, 0, 1);
@@ -18,9 +18,9 @@ cv::cuda::GpuMat shiftFrame(cv::cuda::GpuMat image, int x, int y, cv::Size_<int>
 }
 
 int main(){
-    cv::VideoCapture video1("./fingvideos/left.mp4");
-    cv::VideoCapture video2("./fingvideos/center.mp4");
-    cv::VideoCapture video3("./fingvideos/right.mp4");
+    cv::VideoCapture video1("../fingvideos/left.mp4");
+    cv::VideoCapture video2("../fingvideos/center.mp4");
+    cv::VideoCapture video3("../fingvideos/right.mp4");
 
     cv::Mat Frame1;
     cv::Mat Frame2;
@@ -108,9 +108,9 @@ int main(){
             cv::add(LeftFrame, ReferenceFrame, result);
             cv::add(result, RightFrame, result);
 
+            auto t2 = std::chrono::high_resolution_clock::now(); // end time
             cv::imshow("result", result);
 
-            auto t2 = std::chrono::high_resolution_clock::now(); // end time
 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() / (float)1000;
             double fps = 1000 / (double)duration; // Optional
