@@ -75,6 +75,7 @@ int main(){
         while(running){
             // online phase start
             frameTime = 0.0f;
+            totalWeight = 0.0f;
             auto t1 = std::chrono::high_resolution_clock::now(); // start time
 
             video1 >> Frame1;
