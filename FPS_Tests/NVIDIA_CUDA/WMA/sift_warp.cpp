@@ -65,7 +65,10 @@ int main(){
 	std::vector<float> frameTimeList;
 	bool rendering = true;
 	float fps_wma = 0.0f, frameTime = 0.0f, totalWeight = 0.0f;
-
+    // csv initliazation
+    std::ofstream myfile;
+    myfile.open("./FPS_CUDA_WMA.csv");
+    myfile << "Frame," << "WMA" << std::endl;
     try{
 
 		frameTime = 0.0f;
@@ -81,6 +84,16 @@ int main(){
             video1 >> Frame1;
             video2 >> Frame2;
             video3 >> Frame3;
+
+            if (frameCount <= 5000) {
+                if (Frame1.empty() || Frame2.empty() || Frame3.empty()) {
+                    std::cout << "Loop back\n";
+                    video1.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video2.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video3.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    continue;
+                }
+            }
 
             Frame1_gpu.upload(Frame1);
             Frame2_gpu.upload(Frame2);
@@ -129,7 +142,8 @@ int main(){
             }
 
             fps_wma = 1000 / (float)(frameTime / totalWeight);
-            std::cout << "WMA: " << fps_wma << std::endl;
+            myfile << frameCount << "," << fps_wma << std::endl;
+            std::cout << "Frame Count :" << frameCount << "\n" << "WMA: " << fps_wma << std::endl;
             int key = cv::waitKey(10);
             if (key == 'q' || key == 27) { // 'q' key or Esc key (27) to exit
                 running = false;

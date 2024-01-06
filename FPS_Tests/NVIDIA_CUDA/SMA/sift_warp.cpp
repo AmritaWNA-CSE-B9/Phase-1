@@ -66,6 +66,10 @@ int main(){
 	bool rendering = true;
 	float fps_sma = 0.0f, frameTime = 0.0f;
 
+    std::ofstream myfile;
+    myfile.open("./FPS_CUDA_SMA.csv");
+    myfile << "Frame," << "SMA" << std::endl;
+
     try{
 
 		frameTime = 0.0f;
@@ -78,6 +82,16 @@ int main(){
             video1 >> Frame1;
             video2 >> Frame2;
             video3 >> Frame3;
+
+            if (frameCount <= 5000) {
+                if (Frame1.empty() || Frame2.empty() || Frame3.empty()) {
+                    std::cout << "Loop back\n";
+                    video1.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video2.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video3.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    continue;
+                }
+            }
 
             Frame1_gpu.upload(Frame1);
             Frame2_gpu.upload(Frame2);
@@ -124,7 +138,8 @@ int main(){
             }
             
             fps_sma = frameTimeList.size() / (frameTime / (float)1000);
-            std::cout << "SMA: " << fps_sma << std::endl;
+            myfile << frameCount << "," << fps_sma << std::endl;
+            std::cout << "Frame count: " << frameCount << "\n" << "SMA: " << fps_sma << std::endl;
             int key = cv::waitKey(10);
             if (key == 'q' || key == 27) { // 'q' key or Esc key (27) to exit
                 running = false;

@@ -54,6 +54,9 @@ int main(){
     bool rendering = true;
     float fps_sma = 0.0f, frameTime = 0.0f;
 
+    std::ofstream myfile;
+    myfile.open("./FPS_CPU_SMA.csv");
+    myfile << "Frame," << "SMA" << std::endl;
     try{
         while(running){
             // online phase start
@@ -63,6 +66,15 @@ int main(){
             video2 >> Frame2;
             video3 >> Frame3;
 
+            if (frameCount <= 5000) {
+              if (Frame1.empty() || Frame2.empty() || Frame3.empty()) {
+                  std::cout << "Loop back\n";
+                  video1.set(cv::CAP_PROP_POS_FRAMES, 0);
+                  video2.set(cv::CAP_PROP_POS_FRAMES, 0);
+                  video3.set(cv::CAP_PROP_POS_FRAMES, 0);
+                  continue;
+              }
+            }
             cv::Mat transformedFrameLeft;
             cv::Mat transformedFrameRight;
 
@@ -95,6 +107,7 @@ int main(){
             fps_sma = frameTimeList.size() / (frameTime / (float)1000);
             std::cout << "SMA: " << fps_sma << std::endl;
             
+            myfile << frameCount << "," << fps_sma << std::endl;
             // removing excess mask
             int key = cv::waitKey(10);
             if (key == 'q' || key == 27) { // 'q' key or Esc key (27) to exit
