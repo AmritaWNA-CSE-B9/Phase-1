@@ -60,7 +60,6 @@ int main(){
         myfile << "Frame," << "WMA" << std::endl;
 
         while(running){
-            // online phase start
             frameTime = 0.0f;
             totalWeight = 0.0f;
 
@@ -116,7 +115,7 @@ int main(){
 
             fps_wma = 1000 / (float)(frameTime / totalWeight);
             myfile << frameCount << "," << fps_wma << std::endl;
-            // std::cout << "WMA: " << fps_wma << std::endl;
+            std::cout << "WMA: " << fps_wma << std::endl;
             
             // removing excess mask
             int key = cv::waitKey(10);
