@@ -55,15 +55,32 @@ int main(){
     float fps_wma = 0.0f, frameTime = 0.0f, totalWeight = 0.0f;
 
     try{
+        std::ofstream myfile;
+        myfile.open("./FPS_CPU_WMA.csv");
+        myfile << "Frame," << "WMA" << std::endl;
+
         while(running){
-            // online phase start
             frameTime = 0.0f;
             totalWeight = 0.0f;
 
             auto t1 = std::chrono::high_resolution_clock::now();
-            video1 >> Frame1;
-            video2 >> Frame2;
-            video3 >> Frame3;
+            try{ 
+              video1 >> Frame1;
+              video2 >> Frame2;
+              video3 >> Frame3;
+              if (frameCount <= 5000) {
+                if (Frame1.empty() || Frame2.empty() || Frame3.empty()) {
+                    std::cout << "Loop back\n";
+                    video1.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video2.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    video3.set(cv::CAP_PROP_POS_FRAMES, 0);
+                    continue;
+                }
+              }
+              std::cout << frameCount << "\n";
+            }catch (const std::exception &e){
+              std::cout << "res\n";
+            }
 
             cv::Mat transformedFrameLeft;
             cv::Mat transformedFrameRight;
@@ -95,8 +112,9 @@ int main(){
               totalWeight += w;
               frameTime += frameTimeList[k] * w; // There are better ways of doing this but for simplicity I am going with this.
             }
-            
+
             fps_wma = 1000 / (float)(frameTime / totalWeight);
+            myfile << frameCount << "," << fps_wma << std::endl;
             std::cout << "WMA: " << fps_wma << std::endl;
             
             // removing excess mask
