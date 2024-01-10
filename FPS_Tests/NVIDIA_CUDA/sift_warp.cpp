@@ -58,8 +58,6 @@ int main(){
 
 	int frameCount = 0, windowSize = 1000;
 	std::vector<float> frameTimeList;
-    float fps_wma = 0.0f, frameTime = 0.0f, totalWeight = 0.0f;
-
     try{
 
         float fps_sma = 0.0f, frameTime_sma = 0.0f;
@@ -131,14 +129,17 @@ int main(){
             for(int k = 0;k < frameTimeList.size();k++)
             {
               frameTime_sma += frameTimeList[k]; // There are better ways of doing this but for simplicity I am going with this.
-            }
-            
-            for(int k = 0;k < frameTimeList.size();k++)
-            {
               float w = (k + 1) / (float)frameTimeList.size();
               totalWeight += w;
               frameTime_wma += frameTimeList[k] * w; // There are better ways of doing this but for simplicity I am going with this.
             }
+            
+            // for(int k = 0;k < frameTimeList.size();k++)
+            // {
+            //   float w = (k + 1) / (float)frameTimeList.size();
+            //   totalWeight += w;
+            //   frameTime_wma += frameTimeList[k] * w; // There are better ways of doing this but for simplicity I am going with this.
+            // }
 
             fps_wma = 1000 / (float)(frameTime_wma / totalWeight);
             fps_sma = frameTimeList.size() / (frameTime_sma / (float)1000);
