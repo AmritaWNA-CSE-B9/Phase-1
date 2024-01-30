@@ -55,13 +55,13 @@ cv::Mat stitchFrame_output_cpu(cv::cuda::GpuMat img1_gpu,
 cv::cuda::GpuMat shiftFrame(cv::cuda::GpuMat img1_gpu, int x, int y);
 
 int main(int argc, char const *argv[]) {
-  /* cv::VideoCapture cap1("inputVideos/left.mp4"); */
-  /* cv::VideoCapture cap2("inputVideos/middle.mp4"); */
-  /* cv::VideoCapture cap3("inputVideos/right.mp4"); */
+  cv::VideoCapture cap1("inputVideos/left.mp4");
+  cv::VideoCapture cap2("inputVideos/middle.mp4");
+  cv::VideoCapture cap3("inputVideos/right.mp4");
 
-  cv::VideoCapture cap1("./fingvideos/left.mp4");
-  cv::VideoCapture cap2("./fingvideos/center.mp4");
-  cv::VideoCapture cap3("./fingvideos/right.mp4");
+  /* cv::VideoCapture cap1("./fingvideos/left.mp4"); */
+  /* cv::VideoCapture cap2("./fingvideos/center.mp4"); */
+  /* cv::VideoCapture cap3("./fingvideos/right.mp4"); */
 
   /* cv::VideoCapture cap1("./markerVid/left.mp4"); */
   /* cv::VideoCapture cap2("./markerVid/center.mp4"); */
